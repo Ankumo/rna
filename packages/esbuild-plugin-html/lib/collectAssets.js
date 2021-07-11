@@ -1,3 +1,4 @@
+import sourceFilter from './sourceFilter.js';
 import path from 'path';
 import $ from './esm-cheerio.js';
 
@@ -14,7 +15,7 @@ export function collectAssets(dom, base, outdir, options) {
         ...dom
             .find('[src]:not(script)')
             .get()
-            .filter((element) => $(element).attr('src'))
+            .filter((element) => sourceFilter($(element).attr('src')))
             .map((element) => ({
                 loader: /** @type {import('esbuild').Loader} */ ('file'),
                 options: {
@@ -35,7 +36,7 @@ export function collectAssets(dom, base, outdir, options) {
         ...dom
             .find('link[href]:not([rel="stylesheet"]):not([rel="manifest"]):not([rel*="icon"]), a[download][href], iframe[href]')
             .get()
-            .filter((element) => $(element).attr('href'))
+            .filter((element) => sourceFilter($(element).attr('href')))
             .map((element) => ({
                 loader: /** @type {import('esbuild').Loader} */ ('file'),
                 options: {

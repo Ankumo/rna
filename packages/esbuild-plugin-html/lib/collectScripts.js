@@ -1,5 +1,6 @@
 import path from 'path';
 import $ from './esm-cheerio.js';
+import sourceFilter from './sourceFilter.js';
 
 /**
  * Collect and bundle each <script> reference.
@@ -13,7 +14,7 @@ export function collectScripts(dom, base, outdir, targets = { scriptsTarget: 'es
     return [
         ...dom.find('script[src][type="module"]')
             .get()
-            .filter((element) => $(element).attr('src'))
+            .filter((element) => sourceFilter($(element).attr('src')))
             .map((element) => ({
                 options: {
                     entryPoints: [
@@ -64,7 +65,7 @@ export function collectScripts(dom, base, outdir, targets = { scriptsTarget: 'es
             }),
         ...dom.find('script[src]:not([type]), script[src][type="text/javascript"], script[src][type="application/javascript"]')
             .get()
-            .filter((element) => $(element).attr('src'))
+            .filter((element) => sourceFilter($(element).attr('src')))
             .map((element) => ({
                 options: {
                     entryPoints: [

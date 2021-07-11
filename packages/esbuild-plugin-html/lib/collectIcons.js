@@ -1,3 +1,4 @@
+import sourceFilter from './sourceFilter.js';
 import { promises } from 'fs';
 import path from 'path';
 import $ from './esm-cheerio.js';
@@ -99,7 +100,7 @@ export function collectIcons(dom, base, outdir) {
     const element = dom
         .find('link[rel*="icon"]')
         .get()
-        .filter((element) => $(element).attr('href'))[0];
+        .filter((element) => sourceFilter($(element).attr('href')))[0];
     if (!element) {
         return [];
     }

@@ -2,6 +2,7 @@ import { promises } from 'fs';
 import path from 'path';
 import $ from './esm-cheerio.js';
 import { SUPPORTED_MIME_TYPES, generateIcon } from './generateIcon.js';
+import sourceFilter from './sourceFilter.js';
 
 const { readFile, writeFile, mkdir } = promises;
 
@@ -22,7 +23,7 @@ export function collectWebManifest(dom, base, outdir) {
     const element = dom
         .find('link[rel="manifest"]')
         .get()
-        .filter((element) => $(element).attr('href'))[0];
+        .filter((element) => sourceFilter($(element).attr('href')))[0];
     if (!element) {
         return [];
     }
