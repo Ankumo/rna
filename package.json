@@ -1,6 +1,5 @@
 {
   "name": "@ankumo/rna",
-  "private": true,
   "version": "0.8.1",
   "description": "A bundler, a server and a test runner for modern modules and applications.",
   "main": "lib/index.js",
