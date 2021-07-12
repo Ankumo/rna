@@ -21,7 +21,7 @@ const { readFile, writeFile, mkdir } = promises;
 /**
  * @return An esbuild plugin.
  */
-export default function({ esbuild = esbuildModule, scriptsTarget = 'es6', modulesTarget = 'es2020' } = {}) {
+export default function({ esbuild = esbuildModule, scriptsTarget = 'es6', modulesTarget = 'es2020', generateIcons = true } = {}) {
     /**
      * @type {import('esbuild').Plugin}
      */
@@ -38,7 +38,7 @@ export default function({ esbuild = esbuildModule, scriptsTarget = 'es6', module
                 const root = dom.root();
 
                 const entrypoints = /** @type {Entrypoint[]} */ ([
-                    ...collectIcons(root, basePath, outdir),
+                    ...collectIcons(root, basePath, outdir, generateIcons),
                     ...collectWebManifest(root, basePath, outdir),
                     ...collectStyles(root, basePath, outdir, options),
                     ...collectScripts(root, basePath, outdir, { scriptsTarget, modulesTarget }, options),

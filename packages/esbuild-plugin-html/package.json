@@ -1,7 +1,7 @@
 {
   "name": "@ankumo/esbuild-plugin-html",
   "type": "module",
-  "version": "0.8.14",
+  "version": "0.8.15",
   "description": "A HTML loader plugin for esbuild.",
   "main": "lib/index.js",
   "typings": "./types/index.d.ts",

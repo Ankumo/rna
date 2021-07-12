@@ -93,9 +93,10 @@ const APPLE_LAUNCH_SCREENS = [
  * @param {import('./esm-cheerio').Document} dom The DOM element.
  * @param {string} base The base dir.
  * @param {string} outdir The output dir.
+ * @param {boolean} generateIcons Flag to generate favicons bundles or just load as static asset
  * @return {import('./index').Entrypoint[]} A list of entrypoints.
  */
-export function collectIcons(dom, base, outdir) {
+export function collectIcons(dom, base, outdir, generateIcons) {
     const iconElement = dom.find('link[rel*="icon"]');
     const element = dom
         .find('link[rel*="icon"]')
@@ -123,7 +124,12 @@ export function collectIcons(dom, base, outdir) {
                 chunkNames: '[name]',
                 assetNames: '[name]',
             },
-            async finisher() {
+            async finisher(outFilePath) {
+                if(!generateIcons) {
+                    iconElement.attr('href', `/${path.relative(outdir, outFilePath)}`);
+                    return;
+                }
+                
                 const iconsDir = path.join(outdir, 'icons');
                 const mimeType = iconElement.attr('type') || 'image/png';
                 if (!SUPPORTED_MIME_TYPES.includes(mimeType)) {
