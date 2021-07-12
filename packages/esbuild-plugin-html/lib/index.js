@@ -21,14 +21,23 @@ const { readFile, writeFile, mkdir } = promises;
 /**
  * @return An esbuild plugin.
  */
-export default function({ esbuild = esbuildModule, scriptsTarget = 'es6', modulesTarget = 'es2020', generateIcons = true } = {}) {
+export default function({ 
+    esbuild = esbuildModule, 
+    scriptsTarget = 'es6', 
+    modulesTarget = 'es2020', 
+    generateIcons = true,
+    overrideOptions = {},
+} = {}) {
     /**
      * @type {import('esbuild').Plugin}
      */
     const plugin = {
         name: 'html',
         setup(build) {
-            const options = build.initialOptions;
+            const options = {
+                ...build.initialOptions,
+                ...overrideOptions,
+            };
 
             build.onLoad({ filter: /\.html$/ }, async ({ path: filePath }) => {
                 const contents = await readFile(filePath, 'utf-8');
@@ -38,7 +47,7 @@ export default function({ esbuild = esbuildModule, scriptsTarget = 'es6', module
                 const root = dom.root();
 
                 const entrypoints = /** @type {Entrypoint[]} */ ([
-                    ...collectIcons(root, basePath, outdir, generateIcons),
+                    ...collectIcons(root, basePath, outdir, options, generateIcons),
                     ...collectWebManifest(root, basePath, outdir),
                     ...collectStyles(root, basePath, outdir, options),
                     ...collectScripts(root, basePath, outdir, { scriptsTarget, modulesTarget }, options),
